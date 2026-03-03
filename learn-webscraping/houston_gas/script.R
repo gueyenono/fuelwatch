@@ -10,7 +10,7 @@ library(glue)
 
 # mainh <- read_html_live("https://www.gasbuddy.com/gasprices/texas/houston" )
 
-mainh <- read_html("https://www.gasbuddy.com/gasprices")
+mainh <- read_htmle("https://www.gasbuddy.com/gasprices")
 
 h <- "https://www.gasbuddy.com"
 
@@ -32,6 +32,9 @@ counties <- read_html_live("https://www.gasbuddy.com/gasprices/texas") |>
 
 html_county <- glue("https://www.gasbuddy.com{counties}")
 
+
+# -----------------------------------------------
+
 # get the link of each city of each county ---
 
 city <- read_html_live(
@@ -41,6 +44,9 @@ city <- read_html_live(
   html_attr(name = "href")
 
 html_cty <- glue("https://www.gasbuddy.com{city}")
+
+
+# ---------------------------------------------
 
 # get the link of each gas station ----
 
