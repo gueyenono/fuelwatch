@@ -84,7 +84,7 @@ name <- read_html_live("https://www.gasbuddy.com/station/81176") |>
   
   rating <- read_html_live("https://www.gasbuddy.com/station/81176") |>
     html_element( css = ".Station-module__ratingAverage___1UeHL") |>
-    html_text()
+    html_text()gitgit 
 
 
 
