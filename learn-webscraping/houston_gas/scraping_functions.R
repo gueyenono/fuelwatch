@@ -1,19 +1,11 @@
 # Scrape gas station data ----
 
-# > Set user agent
-
-# user_agent <- httr::user_agent(
-#   agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-# )
-# gas_station_url <- "https://www.gasbuddy.com/station/79221"
-# gas_station_url <- "https://www.gasbuddy.com/station/206225"
-#
-# scrape_gas_station_data(
-#   gas_station_url = gas_station_url,
-#   user_agent = user_agent
-# )
-
-scrape_gas_station_data <- function(gas_station_url, user_agent) {
+scrape_gas_station_data <- function(
+  gas_station_url,
+  user_agent = httr::user_agent(
+    agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  )
+) {
   response <- httr::GET(
     url = gas_station_url,
     user_agent
