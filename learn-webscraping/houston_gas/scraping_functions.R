@@ -2,9 +2,10 @@
 
 # > Set user agent
 
-# ua <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"
-# user_agent <- httr::user_agent(agent = ua)
-# # gas_station_url <- "https://www.gasbuddy.com/station/79221"
+# user_agent <- httr::user_agent(
+#   agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+# )
+# gas_station_url <- "https://www.gasbuddy.com/station/79221"
 # gas_station_url <- "https://www.gasbuddy.com/station/206225"
 #
 # scrape_gas_station_data(
@@ -13,7 +14,12 @@
 # )
 
 scrape_gas_station_data <- function(gas_station_url, user_agent) {
-  html_raw <- rvest::read_html_live(url = gas_station_url)
+  response <- httr::GET(
+    url = gas_station_url,
+    user_agent
+  )
+
+  html_raw <- rvest::read_html(x = response)
 
   name <- html_raw |>
     html_element(css = ".StationInfoBox-module__header___2cjCS span") |>
