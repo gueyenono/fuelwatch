@@ -1,5 +1,3 @@
-# Scrape gas station data ----
-
 scrape_gas_station_data <- function(
   gas_station_url,
   user_agent = httr::user_agent(
@@ -14,14 +12,14 @@ scrape_gas_station_data <- function(
   html_raw <- rvest::read_html(x = response)
 
   name <- html_raw |>
-    html_element(css = ".StationInfoBox-module__header___2cjCS span") |>
-    html_text()
+    rvest::html_element(css = ".StationInfoBox-module__header___2cjCS span") |>
+    rvest::html_text()
 
   location <- html_raw |>
-    html_element(
+    rvest::html_element(
       css = ".StationInfoBox-module__ellipsisNoWrap___1-lh5 , .StationInfoBox-module__ellipsisNoWrap___1-lh5 span"
     ) |>
-    html_text()
+    rvest::html_text()
 
   gas_grades <- html_raw |>
     rvest::html_elements(
@@ -31,13 +29,13 @@ scrape_gas_station_data <- function(
 
   gas_prices <- html_raw |>
     rvest::html_elements(css = ".FuelTypePriceDisplay-module__price___3iizb") |>
-    html_text()
+    rvest::html_text()
 
   names(gas_prices) <- gas_grades
 
   rating <- html_raw |>
-    html_element(css = ".Station-module__ratingAverage___1UeHL") |>
-    html_text()
+    rvest::html_element(css = ".Station-module__ratingAverage___1UeHL") |>
+    rvest::html_text()
 
   out1 <- tibble::tibble(name, location, rating)
   out2 <- tibble::as_tibble(t(gas_prices))
@@ -88,8 +86,6 @@ scrape_urls <- function(
   glue::glue("https://www.gasbuddy.com{endpoints}")
 }
 
-
-# Get state
 
 scrape_all_station_urls <- function(main_url) {
   state_urls <- scrape_urls(url = main_url, area_type = "state")
