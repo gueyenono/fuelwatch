@@ -65,11 +65,15 @@ generate_css_classes <- function() {
 }
 
 
+# url <- "https://www.gasbuddy.com/"
+# area_type <- "state"
+
 scrape_urls <- function(
   url,
   area_type,
   user_agent = httr::user_agent(
-    agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    # agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
   ),
   css_class_vector = generate_css_classes()
 ) {
@@ -81,14 +85,17 @@ scrape_urls <- function(
   )
 
   endpoints <- rvest::read_html(x = response) |>
-    html_elements(css = css_class) |>
-    html_attr(name = "href")
+    rvest::html_elements(css = css_class) |>
+    rvest::html_attr(name = "href")
 
-  glue("https://www.gasbuddy.com{endpoints}")
+  glue::glue("https://www.gasbuddy.com{endpoints}")
 }
 
 
 # Get state
+
+# main_url <- "https://www.gasbuddy.com/"
+
 scrape_all_station_urls <- function(main_url) {
   state_urls <- scrape_urls(url = main_url, area_type = "state")
 
