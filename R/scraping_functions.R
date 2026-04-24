@@ -1,10 +1,5 @@
-#' Scrape Data from Gas Station Page
-#'
-#' @param gas_station_url URL of specific gas station
-#' @param user_agent User agent for scraping the website
-#'
-#' @return [tibble] Gas station data: name (name of the gas station), location (location of the gas station), rating (user rating of the gas station), grade (grade of gas), price (gas price)
-#' @export
+# Scrape gas station data ----
+
 scrape_gas_station_data <- function(
   gas_station_url,
   user_agent = httr::user_agent(
@@ -19,14 +14,14 @@ scrape_gas_station_data <- function(
   html_raw <- rvest::read_html(x = response)
 
   name <- html_raw |>
-    rvest::html_element(css = ".StationInfoBox-module__header___2cjCS span") |>
-    rvest::html_text()
+    html_element(css = ".StationInfoBox-module__header___2cjCS span") |>
+    html_text()
 
   location <- html_raw |>
-    rvest::html_element(
+    html_element(
       css = ".StationInfoBox-module__ellipsisNoWrap___1-lh5 , .StationInfoBox-module__ellipsisNoWrap___1-lh5 span"
     ) |>
-    rvest::html_text()
+    html_text()
 
   gas_grades <- html_raw |>
     rvest::html_elements(
@@ -36,13 +31,13 @@ scrape_gas_station_data <- function(
 
   gas_prices <- html_raw |>
     rvest::html_elements(css = ".FuelTypePriceDisplay-module__price___3iizb") |>
-    rvest::html_text()
+    html_text()
 
   names(gas_prices) <- gas_grades
 
   rating <- html_raw |>
-    rvest::html_element(css = ".Station-module__ratingAverage___1UeHL") |>
-    rvest::html_text()
+    html_element(css = ".Station-module__ratingAverage___1UeHL") |>
+    html_text()
 
   out1 <- tibble::tibble(name, location, rating)
   out2 <- tibble::as_tibble(t(gas_prices))
@@ -60,8 +55,8 @@ scrape_gas_station_data <- function(
 
 generate_css_classes <- function() {
   css_class <- c(
-    ".SearchStateCloud-module__region___1r8Zu",
     ".DataGrid-module__link___1Pa9Z",
+    ".AreaCountyList-module__grid___6Le8s+ .AreaCountyList-module__grid___6Le8s .DataGrid-module__link___1Pa9Z",
     ".AreaCountyList-module__areaItem___3c4w7 .DataGrid-module__link___1Pa9Z",
     ".StationDisplay-module__stationNameHeader___1A2q8 a"
   )
@@ -69,6 +64,9 @@ generate_css_classes <- function() {
   css_class
 }
 
+
+# url <- "https://www.gasbuddy.com/"
+# area_type <- "state"
 
 scrape_urls <- function(
   url,
@@ -94,6 +92,10 @@ scrape_urls <- function(
 }
 
 
+# Get state
+
+# main_url <- "https://www.gasbuddy.com/"
+
 scrape_all_station_urls <- function(main_url) {
   state_urls <- scrape_urls(url = main_url, area_type = "state")
 
@@ -112,14 +114,3 @@ scrape_all_station_urls <- function(main_url) {
   }) |>
     purrr::flatten_chr()
 }
-
-# gsd <- purrr::map_dfr(.x = station_urls, .f = \(station_url) {
-#   scrape_gas_station_data(
-#     gas_station_url = station_url,
-#     user_agent = httr::user_agent(
-#       agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-#       # agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-#     )
-#   )
-#   Sys.sleep(2)
-# })
