@@ -55,7 +55,7 @@ scrape_gas_station_data <- function(
 
 generate_css_classes <- function() {
   css_class <- c(
-    ".DataGrid-module__link___1Pa9Z",
+    ".SearchStateCloud-module__region___1r8Zu",
     ".AreaCountyList-module__grid___6Le8s+ .AreaCountyList-module__grid___6Le8s .DataGrid-module__link___1Pa9Z",
     ".AreaCountyList-module__areaItem___3c4w7 .DataGrid-module__link___1Pa9Z",
     ".StationDisplay-module__stationNameHeader___1A2q8 a"
@@ -71,20 +71,19 @@ generate_css_classes <- function() {
 scrape_urls <- function(
   url,
   area_type,
-  user_agent = httr::user_agent(
-    # agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-  ),
+  # user_agent = httr::user_agent(
+  #   # agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  #   agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+  # ),
   css_class_vector = generate_css_classes()
 ) {
   css_class <- css_class_vector[area_type]
 
-  response <- httr::GET(
-    url = url,
-    user_agent
-  )
+  html_response <- httr2::request(base_url = url) |>
+    httr2::req_perform() |>
+    httr2::resp_body_html()
 
-  endpoints <- rvest::read_html(x = response) |>
+  endpoints <- html_response |>
     rvest::html_elements(css = css_class) |>
     rvest::html_attr(name = "href")
 

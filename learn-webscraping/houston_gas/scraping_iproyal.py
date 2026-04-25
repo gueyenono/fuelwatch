@@ -2,7 +2,7 @@
 import requests
 
 # url = "https://ipv4.icanhazip.com"
-url = "https://www.gasbuddy.com/"
+url = "https://www.gasbuddy.com/alabama"
 proxy = "geo.iproyal.com:12321"
 proxy_auth = "bkms7LGsn8JU3hPI:hjVTmMdbd02nKrQR"
 proxies = {
